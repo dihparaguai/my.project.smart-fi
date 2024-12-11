@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+</head>
+<body>
+
+    <form action="cadastrar_movimentacao" method="post">
+        <h1>CADASTRO DE TRANSAÇÕES</h1>
+        <div>
+            <div>
+                <label for="category">Categoria</label>
+                <ul>
+                    <li><input type="radio" name="category" required> a</li>
+                    <li><input type="radio" name="category" required> b</li>
+                    <li><input type="radio" name="category" required> c</li>
+                </ul>
+            </div>
+            <div>
+                <label for="fact_date">Data do Fato</label>
+                <input type="date" name="fatc_date" required>
+            </div>
+            <div>
+                <label for="payment_date">Data do Pagamento</label>
+                <input type="date" name="payment_date" required>
+            </div>
+            <div>
+                <label for="value">Valor</label>
+                <input type="number" name="value" placeholder="R$ _,__" required>
+            </div>
+            <div>
+                <label for="description">Descrição</label>
+                <input type="text" name="description">
+            </div>
+            <div>
+                <label for="payment_type">Forma de Pagamento</label>
+                <select name="" id="">
+                    <option type="radio" name="payment_type" required> Debito
+                    <option type="radio" name="payment_type" required> Credito
+                    <option type="radio" name="payment_type" required> VR
+                </select>
+            </div>
+            <div>
+                <label for="transaction_type">Tipo de Transação: </label>
+                <input type="radio" name="transaction_type" required> Saida
+                <input type="radio" name="transaction_type" required> Entrada
+            </div>
+
+        </div>
+    </form>
+</body>
+</html>
