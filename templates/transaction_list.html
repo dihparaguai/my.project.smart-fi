@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista</title>
+</head>
+<body>
+    <h1>LISTAGEM DE TRANSAÇÕES</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Data do Fato</th>
+                <th>Data do Pagamento</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Forma de Pagamento</th>
+                <th>Tipo da Transação</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>{{ fact_date }}</td>
+                <td>{{ payment_date }}</td>
+                <td>{{ description }}</td>
+                <td>{{ value }}</td>
+                <td>{{ payment_type }}</td>
+                <td>{{ transaction_type }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+</body>
+</html>
