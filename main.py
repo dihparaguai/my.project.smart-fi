@@ -1,11 +1,9 @@
 from modules.user import User
 from modules.category import Category
 from modules.payment_type import Payment_type
-
 from modules.transaction import Transaction  
 
-from flask import Flask, render_template
-
+from flask import Flask, redirect, render_template, request, url_for
 app = Flask(__name__)
 
 
@@ -46,10 +44,36 @@ transactions.append(transaction2)
 
 
 
+@app.route('/')
+def index():
+    return redirect(url_for("transaction_list"))
+
+@app.route("/transaction-register")
+def transaction_register():
+    return render_template("transaction_register.html")  
+
+
+@app.route("/_transaction-register", methods=["POST"])
+def _transaction_register():
+    transaction = Transaction(
+        user=               user,
+        category=           category,
+        payment_type=       payment_type,
+        
+        transaction_id=     1,
+        fact_date=          request.form['fact_date'],
+        payment_date=       request.form['payment_date'],
+        description=        request.form['description'],
+        transaction_type=   request.form.get('transaction_type'),
+        value=              request.form['value']
+    )
+    
+    
+    transactions.append(transaction)
+    return redirect(url_for("transaction_list"))  
 
 @app.route("/transaction-list")
 def transaction_list():
-    
     return render_template("transaction_list.html", transactions=transactions)  
 
 

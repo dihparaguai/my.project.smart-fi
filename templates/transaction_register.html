@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
 
-    <form action="cadastrar_movimentacao" method="post">
+    <form action="_transaction-register" method="POST">
         <h1>CADASTRO DE TRANSAÇÕES</h1>
         <div>
             <div>
@@ -20,7 +21,7 @@
             </div>
             <div>
                 <label for="fact_date">Data do Fato</label>
-                <input type="date" name="fatc_date" required>
+                <input type="date" name="fact_date" required>
             </div>
             <div>
                 <label for="payment_date">Data do Pagamento</label>
@@ -44,11 +45,11 @@
             </div>
             <div>
                 <label for="transaction_type">Tipo de Transação: </label>
-                <input type="radio" name="transaction_type" required> Saida
-                <input type="radio" name="transaction_type" required> Entrada
+                <input type="radio" name="transaction_type" value="expense" required> Saida
+                <input type="radio" name="transaction_type" value="income" required> Entrada
             </div>
-
         </div>
+        <button type="submit">Cadastrar</button>
     </form>
 </body>
 </html>
