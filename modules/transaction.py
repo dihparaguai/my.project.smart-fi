@@ -13,7 +13,7 @@ class Transaction():
         payment_type: Payment_type,
 
         # attributes
-        transaction_id,
+        id,
         fact_date,
         payment_date,
         description,
@@ -21,10 +21,10 @@ class Transaction():
         value
     ):
         self.user = user
-        self.category = category.name
-        self.payment_type = payment_type.name
+        self.category = category
+        self.payment_type = payment_type
 
-        self.transaction_id = transaction_id
+        self.id = id
         self.fact_date = fact_date
         self.payment_date = payment_date
         self.description = description
@@ -34,12 +34,12 @@ class Transaction():
 #
     def __repr__(self):
         return f'''
-        transaction_id = {self.transaction_id}
+        id = {self.id}
         fact_date = {self.fact_date}
         payment_date = {self.payment_date}
-        value = {self.value}
         description = {self.description}
         transaction_type = {self.transaction_type}
-        category = {self.category}
-        payment_type = {self.payment_type}
+        value = {self.value}
+        category = {self.category.name}
+        payment_type = {self.payment_type.name}
         '''

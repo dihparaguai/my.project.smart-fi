@@ -14,9 +14,10 @@
             <div>
                 <label for="category">Categoria</label>
                 <ul>
-                    <li><input type="radio" name="category" required> a</li>
-                    <li><input type="radio" name="category" required> b</li>
-                    <li><input type="radio" name="category" required> c</li>
+                    {# para iterar sobre o dicionario, precisa de chave e valor = "id, category" #}
+                    {% for id, category in category_dict.items() %}
+                    <li><input type="radio" name="category" value="{{ category.id }}" required> {{ category.name }}</li>
+                    {% endfor %}
                 </ul>
             </div>
             <div>

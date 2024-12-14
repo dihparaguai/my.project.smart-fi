@@ -17,18 +17,20 @@
                 <th>Valor</th>
                 <th>Forma de Pagamento</th>
                 <th>Tipo da Transação</th>
+                <th>Categoria</th>
             </tr>
         </thead>
 
         <tbody>
-            {% for transaction in transactions %}
+            {% for transaction in transaction_list %}
             <tr>
                 <td>{{ transaction.fact_date }}</td>
                 <td>{{ transaction.payment_date }}</td>
                 <td>{{ transaction.description }}</td>
                 <td>{{ transaction.value }}</td>
-                <td>{{ transaction.payment_type }}</td>
-                <td>{{ transaction.transaction_type }}</td>
+                <td>{{ transaction.payment_type.name }}</td>
+                <td>{{ "Saida" if transaction.transaction_type == "expense" else "Entrada"  }}</td>
+                <td>{{ transaction.category.name }}</td>
             </tr>
             {% endfor %}
         </tbody>
