@@ -18,13 +18,18 @@ category_dict = {
 }
 
 
-payment_type = Payment_type(1, "Credito", "Diego Paraguai")
+payment_type1 = Payment_type(1, "Credito", "Diego Paraguai")
+payment_type2 = Payment_type(2, "Debito", "Diego Paraguai")
+payment_type_dict = {
+    payment_type1.id : payment_type1,
+    payment_type2.id : payment_type2
+}
 
 
 transaction1 = Transaction(
     user,
     category1,
-    payment_type,
+    payment_type2,
 
     1,
     "2024-12-09",
@@ -36,7 +41,7 @@ transaction1 = Transaction(
 transaction2 = Transaction(
     user=user,
     category=category2,
-    payment_type=payment_type,
+    payment_type=payment_type1,
 
     id=2,
     fact_date="2024-12-09",
@@ -57,18 +62,20 @@ def index():
 
 @app.route("/transaction-register")
 def transaction_register():
-    return render_template("transaction_register.html", category_dict=category_dict)
+    return render_template("transaction_register.html", category_dict=category_dict, payment_type_dict=payment_type_dict)
 
 
 @app.route("/_transaction-register", methods=["POST"])
 def _transaction_register():
     # o retorno do request é uma string, entao foi convertido
     category_id = int(request.form.get('category'))
+    payment_type_id = int(request.form.get('payment_type'))
+    print(payment_type_id)
     
     transaction = Transaction(
         user=user,
         category=category_dict.get(category_id),
-        payment_type=payment_type,
+        payment_type=payment_type_dict.get(payment_type_id),
 
         id=1,
         fact_date=request.form['fact_date'],
