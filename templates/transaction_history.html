@@ -16,15 +16,17 @@
         </thead>
 
         <tbody>
-            {% for transaction in transaction_list %}
+            {% for id, transaction in transaction_dict.items() %}
             <tr>
                 <td>{{ transaction.fact_date }}</td>
                 <td>{{ transaction.payment_date }}</td>
                 <td>{{ transaction.description }}</td>
                 <td>{{ transaction.value }}</td>
                 <td>{{ transaction.payment_type.name }}</td>
-                <td>{{ "Saida" if transaction.transaction_type == "expense" else "Entrada"  }}</td>
                 <td>{{ transaction.category.name }}</td>
+                <td>{{ "Saida" if transaction.transaction_type == "expense" else "Entrada"  }}</td>
+                <td><a href="{{ url_for('transaction_update', id=transaction.id) }}">editar</a></td>
+                <td><a href="{{ url_for('_transaction_delete', id=transaction.id) }}">deletar</a></td>
             </tr>
             {% endfor %}
         </tbody>

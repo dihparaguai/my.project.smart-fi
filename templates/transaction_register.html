@@ -1,50 +1,53 @@
 {% extends "template.html" %}
 {% block content %}
 
-    <form action="_transaction-register" method="POST">
-        <h1>CADASTRO DE TRANSAÇÕES</h1>
+<form action="_transaction-register" method="POST">
+    <h1>CADASTRO DE TRANSAÇÕES</h1>
+    <div>
         <div>
-            <div>
-                <label for="category">Categoria</label>
-                <ul>
-                    {# para iterar sobre o dicionario, precisa de chave e valor = "id, category" #}
-                    {% for id, category in category_dict.items() %}
-                    <li><input type="radio" name="category" value="{{ category.id }}" required> {{ category.name }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div>
-                <label for="fact_date">Data do Fato</label>
-                <input type="date" name="fact_date" required>
-            </div>
-            <div>
-                <label for="payment_date">Data do Pagamento</label>
-                <input type="date" name="payment_date" required>
-            </div>
-            <div>
-                <label for="value">Valor</label>
-                <input type="number" name="value" placeholder="R$ _,__" required>
-            </div>
-            <div>
-                <label for="description">Descrição</label>
-                <input type="text" name="description">
-            </div>
-            <div>
-                <label for="payment_type">Forma de Pagamento</label>
-                {# o atributo 'name' é passado no 'select' #}
-                <select name="payment_type" id="">
-                    {% for id, payment_type in payment_type_dict.items() %}
-                    <option value="{{ payment_type.id }}" required> {{ payment_type.name }}
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="transaction_type">Tipo de Transação: </label>
-                <input type="radio" name="transaction_type" value="expense" required> Saida
-                <input type="radio" name="transaction_type" value="income" required> Entrada
-            </div>
+            <label for="category">Categoria</label>
+            <select name="category" >
+                
+                {# para iterar sobre o dicionario, precisa de chave e valor = "id, category" #}
+                {% for id, category in category_dict.items() %}
+                <option value="{{ id }}" required> {{ category.name }}</li>
+                {% endfor %}
+            </select>
         </div>
-        <button type="submit">Cadastrar</button>
-    </form>
+        <div>
+            <label for="fact_date" class="form-label">Data do Fato</label>
+            <input type="date" name="fact_date" required>
+        </div>
+        <div>
+            <label for="payment_date">Data do Pagamento</label>
+            <input type="date" name="payment_date" required>
+        </div>
+        <div>
+            <label for="value">Valor</label>
+            <input type="number" name="value" placeholder="R$ _,__" required>
+        </div>
+        <div>
+            <label for="description">Descrição</label>
+            <input type="text" name="description">
+        </div>
+        <div>
+            <label for="payment_type">Forma de Pagamento</label>
+            
+            {# o atributo 'name' é passado atraves do 'select' #}
+            <select name="payment_type">
+                {% for id, payment_type in payment_type_dict.items() %}
+                <option value="{{ id }}" required> {{ payment_type.name }}
+                {% endfor %}
+            </select>
+
+        </div>
+        <div>
+            <label for="transaction_type" class="form-check-label">Tipo de Transação: </label>
+            <input type="radio" name="transaction_type" value="expense" required> Saida
+            <input type="radio" name="transaction_type" value="income" required> Entrada
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+</form>
 
 {% endblock %}
