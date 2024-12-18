@@ -1,0 +1,66 @@
+{% extends "template.html" %}
+{% block content %}
+
+<form action="_transaction-update" method="POST">
+    <h1>EDITAR TRANSAÇÃO</h1>
+    <div>
+        <div>
+            <label for="category">Categoria</label>
+            <select name="category">
+                <option value="{{ transaction.category.id }}" selected> {{ transaction.category.name }}</li>
+                
+                {# verifica se id da lista ja existe, para evitar duplicar #}
+                {% for id, category in category_dict.items() %}
+                    {% if id != transaction.category.id: %}
+                    <option value="{{ id }}" required> {{ category.name }}</li>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="fact_date" class="form-label">Data do Fato</label>
+            <input type="date" name="fact_date" value="{{ transaction.fact_date }}" required>
+        </div>
+        <div>
+            <label for="payment_date">Data do Pagamento</label>
+            <input type="date" name="payment_date" value="{{ transaction.payment_date }}" required>
+        </div>
+        <div>
+            <label for="value">Valor</label>
+            <input type="number" name="value" placeholder="R$ _,__" value="{{ transaction.value }}"required>
+        </div>
+        <div>
+            <label for="description">Descrição</label>
+            <input type="text" name="description" value="{{ transaction.description }}">
+        </div>
+        <div>
+            <label for="payment_type">Forma de Pagamento</label>
+            <select name="payment_type">
+                <option value="{{ transaction.payment_type.id }}" required> {{ transaction.payment_type.name }}
+                
+                {# verifica se id da lista ja existe, para evitar duplicar #}
+                {% for id, payment_type in payment_type_dict.items() %}
+                    {% if id != transaction.payment_type.id: %}
+                    <option value="{{ id }}" required> {{ payment_type.name }}
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+        </div>
+        <div>
+            <label for="transaction_type" class>Tipo de Transação: </label>
+            
+            {% if transaction.transaction_type == "expense": %}
+            <input type="radio" name="transaction_type" value="expense" checked required> Saida
+            <input type="radio" name="transaction_type" value="income" required> Entrada
+            {% else %}
+            <input type="radio" name="transaction_type" value="expense" required> Saida
+            <input type="radio" name="transaction_type" value="income" checked required> Entrada
+            {% endif %}
+
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+</form>
+
+{% endblock %}
