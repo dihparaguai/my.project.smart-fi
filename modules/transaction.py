@@ -1,6 +1,6 @@
 from modules.category import Category
 from modules.user import User
-from modules.payment_type import Payment_type
+from modules.payment_type import PaymentType
 
 
 class Transaction():
@@ -10,7 +10,7 @@ class Transaction():
         # composition
         user: User,
         category: Category,
-        payment_type: Payment_type,
+        payment_type: PaymentType,
 
         # attributes
         id,

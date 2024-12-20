@@ -1,4 +1,4 @@
-class Payment_type:
+class PaymentType:
     def __init__(self, id, name, owner):
         self.id = id
         self.name = name

@@ -1,6 +1,6 @@
 from modules.user import User
 from modules.category import Category
-from modules.payment_type import Payment_type
+from modules.payment_type import PaymentType
 from modules.transaction import Transaction
 
 from flask import Flask, redirect, render_template, request, url_for
@@ -18,8 +18,8 @@ category_dict = {
 }
 
 
-payment_type1 = Payment_type(1, "Credito", "Diego Paraguai")
-payment_type2 = Payment_type(2, "Debito", "Diego Paraguai")
+payment_type1 = PaymentType(1, "Credito", "Diego Paraguai")
+payment_type2 = PaymentType(2, "Debito", "Diego Paraguai")
 payment_type_dict = {
     payment_type1.id: payment_type1,
     payment_type2.id: payment_type2
@@ -94,8 +94,9 @@ def _transaction_update():
     return redirect(url_for("transaction_history"))
 
 
-@app.route("/_transaction-delete")
+@app.route("/_transaction-delete/<int:id>")
 def _transaction_delete():
+    transaction_dict[id] = None
     return redirect(url_for("transaction_history"))
 
 
