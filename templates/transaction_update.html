@@ -1,7 +1,8 @@
 {% extends "template.html" %}
 {% block content %}
 
-<form action="_transaction-update" method="POST">
+<form action="/_transaction-update" method="POST">
+    <input type="hidden" name="id" value="{{ transaction.id }}">
     <h1>EDITAR TRANSAÇÃO</h1>
     <div>
         <div>
@@ -27,7 +28,7 @@
         </div>
         <div>
             <label for="value">Valor</label>
-            <input type="number" name="value" placeholder="R$ _,__" value="{{ transaction.value }}"required>
+            <input type="number" name="value" placeholder="R$ _,__" value="{{ transaction.value }}" required>
         </div>
         <div>
             <label for="description">Descrição</label>

@@ -58,10 +58,10 @@ def _transaction_register():
 
     transaction = Transaction(
         user=user,
-        category=category_dict.get(category_id),
-        payment_type=payment_type_dict.get(payment_type_id),
+        category=category_dict[category_id],
+        payment_type=payment_type_dict[payment_type_id],
 
-        id=3,
+        id=4,
         fact_date=request.form['fact_date'],
         payment_date=request.form['payment_date'],
         description=request.form['description'],
@@ -69,18 +69,28 @@ def _transaction_register():
         value=request.form['value']
     )
 
-    transaction_dict = {transaction.id: transaction}
+    transaction_dict[transaction.id] = transaction
     return redirect(url_for("transaction_history"))
 
 
 @app.route("/transaction-update/<int:id>")
 def transaction_update(id):
-    transaction = transaction_dict.get(id)
+    transaction = transaction_dict[id]
     return render_template("transaction_update.html", category_dict=category_dict, payment_type_dict=payment_type_dict, transaction=transaction)
 
 
-@app.route("/_transaction-update")
+@app.route("/_transaction-update", methods=["POST"])
 def _transaction_update():
+    transaction = transaction_dict[int(request.form['id'])]
+    
+    transaction.category=category_dict[int(request.form.get('category'))]
+    transaction.payment_type=payment_type_dict[int(request.form.get('payment_type'))]
+    transaction.fact_date=request.form['fact_date']
+    transaction.payment_date=request.form['payment_date']
+    transaction.description=request.form['description']
+    transaction.transaction_type=request.form.get('transaction_type')
+    transaction.value=request.form['value']
+    
     return redirect(url_for("transaction_history"))
 
 
