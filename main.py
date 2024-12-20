@@ -95,8 +95,8 @@ def _transaction_update():
 
 
 @app.route("/_transaction-delete/<int:id>")
-def _transaction_delete():
-    transaction_dict[id] = None
+def _transaction_delete(id):
+    transaction_dict.pop(id)
     return redirect(url_for("transaction_history"))
 
 
