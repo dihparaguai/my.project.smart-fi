@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% block content %}
+
+<form action="{{ url_for('_user_login') }}" method="POST">
+    <h1>LOGIN</h1>
+    <div>
+        <label for="email">E-mail</label>
+        <input type="email" name="email" required>
+    </div>
+    <div>
+        <label for="password">Senha</label>
+        <input type="password" name="password">
+    </div>
+    <div>
+        <button type="submit">Entrar</button>
+        <a href="{{ url_for('user_register') }}">Cadastrar</a>
+    </div>
+</form>
+
+
+{% endblock %}
