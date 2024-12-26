@@ -106,11 +106,13 @@ def _transaction_delete(id):
 
 
 @app.route("/user-login")
+# renderiza a pagina de entrada do usuario
 def user_login():
     return render_template("user_login.html")
 
 
 @app.route("/_user-login", methods=['POST'])
+# autentica se o usuario e senha existem
 def _user_login():
     
     email = request.form['email']
@@ -119,17 +121,20 @@ def _user_login():
     for user in user_dict.values():
         if user.email == email:
             if user.password == password:
+                flash('Logado com Sucesso', 'success')
                 return redirect(url_for("index"))
         
     return redirect(url_for("user_login"))
 
 
 @app.route("/user-register")
+# renderiza a pagina de registro de usuario
 def user_register():
-    return render_template("user_register.html")
+    return render_template("user_register.html", email="", name="")
 
 
 @app.route("/_user-register", methods=['POST'])
+# valida o novo cadastro de usuario
 def _user_register():
     
     email = request.form['email']
@@ -140,6 +145,11 @@ def _user_register():
     if password != password_retyped:
         flash('Senhas não foram digitadas iguais', 'error')
         return redirect(url_for("user_register"))
+    
+    for user in user_dict.values():
+        if user.email == email:
+            flash('Usuario ja existe', 'error')
+            return render_template("user_register.html", email=email, name=name)
         
     user = User(id=3, email=email, name=name, password=password)
     
