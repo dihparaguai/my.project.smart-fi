@@ -8,31 +8,31 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '@chave_secreta@'
 
 
-user1 = User(1, "Diego", "diego@example.com", "senha123")
-user2 = User(2, "Rodrigo", "rodrigo@example.com", "senha456")
+user1 = User(id=1, name="Diego", email="diego@example.com", password="senha123")
+user2 = User(id=2, name="Rodrigo", email="rodrigo@example.com", password="senha456")
 user_dict = {
     user1.id: user1,
     user2.id: user2
 }
 
-category1 = Category(1, "Alimentação", "Gastos com comida")
-category2 = Category(2, "Lazer", "Gastos com parque")
+category1 = Category(id=1, name="Alimentação", description="Gastos com comida")
+category2 = Category(id=2, name="Lazer", description="Gastos com parque")
 category_dict = {
     category1.id: category1,
     category2.id: category2
 }
 
 
-payment_type1 = PaymentType(1, "Credito", "Diego Paraguai")
-payment_type2 = PaymentType(2, "Debito", "Diego Paraguai")
+payment_type1 = PaymentType(id=1, name="Credito", owner="Diego Paraguai")
+payment_type2 = PaymentType(id=2, name="Debito", owner="Diego Paraguai")
 payment_type_dict = {
     payment_type1.id: payment_type1,
     payment_type2.id: payment_type2
 }
 
 
-transaction1 = Transaction(user2, category1, payment_type1, 1, "2024-12-09", "2024-12-10", "Compra de supermercado", "expense", 150.75)
-transaction2 = Transaction(user1, category2, payment_type2, 2, "2023-11-08", "2022-09-11", "Compra de ...", "income", 0.75)
+transaction1 = Transaction(user=user2, category=category1, payment_type=payment_type1, id=1, fact_date="2024-12-09", payment_date="2024-12-10", description="Compra de supermercado", transaction_type="expense", value=150.75)
+transaction2 = Transaction(user=user1, category=category2, payment_type=payment_type2, id=2, fact_date="2023-11-08", payment_date="2022-09-11", description="Compra de ...", transaction_type="income", value=0.75)
 transaction_dict = {
     transaction1.id: transaction1,
     transaction2.id: transaction2
@@ -110,9 +110,18 @@ def user_login():
     return render_template("user_login.html")
 
 
-@app.route("/_user-login")
+@app.route("/_user-login", methods=['POST'])
 def _user_login():
-    return redirect(url_for("/"))
+    
+    email = request.form['email']
+    password = request.form['password']
+    
+    for user in user_dict.values():
+        if user.email == email:
+            if user.password == password:
+                return redirect(url_for("index"))
+        
+    return redirect(url_for("user_login"))
 
 
 @app.route("/user-register")
