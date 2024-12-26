@@ -1,0 +1,14 @@
+/* personaliza a cor do flask-flash cada tipo de mensagem */
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+.info {
+    color: blue;
+}
