@@ -9,10 +9,7 @@
 
 </head>
 <body>
-
-    {% block content %}
-    {% endblock %}    
-
+    
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
             <ul>
@@ -22,5 +19,10 @@
             </ul>
         {% endif %}
     {% endwith %}
+
+    {% block content %}
+    {% endblock %}    
+
+    
 </body>
 </html>

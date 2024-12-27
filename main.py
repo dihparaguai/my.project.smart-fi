@@ -3,7 +3,7 @@ from modules.category import Category
 from modules.payment_type import PaymentType
 from modules.transaction import Transaction
 
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, redirect, render_template, request, session, url_for, flash
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '@chave_secreta@'
 
@@ -41,16 +41,21 @@ transaction_dict = {
 
 @app.route('/')
 def index():
-    return redirect(url_for("transaction_history"))
+    return redirect(url_for('user_login'))
 
 
 @app.route("/transaction-history")
 def transaction_history():
+    if 'user' not in session or session['user'] == None:
+        return redirect(url_for('user_login'))
     return render_template("transaction_history.html", transaction_dict=transaction_dict)
 
 
 @app.route("/transaction-register")
-def transaction_register():
+def transaction_register():  
+    if 'user' not in session or session['user'] == None:
+        return redirect(url_for('user_login'))
+    
     # renderiza a pagina com os valores cadastrados em banco de dados
     return render_template("transaction_register.html", category_dict=category_dict, payment_type_dict=payment_type_dict)
 
@@ -80,6 +85,9 @@ def _transaction_register():
 
 @app.route("/transaction-update/<int:id>")
 def transaction_update(id):
+    if 'user' not in session or session['user'] == None:
+        return redirect(url_for('user_login'))
+    
     transaction = transaction_dict[id]
     return render_template("transaction_update.html", category_dict=category_dict, payment_type_dict=payment_type_dict, transaction=transaction)
 
@@ -108,7 +116,10 @@ def _transaction_delete(id):
 @app.route("/user-login")
 # renderiza a pagina de entrada do usuario
 def user_login():
-    return render_template("user_login.html")
+    if 'user' not in session or session['user'] == None:
+        return render_template("user_login.html")
+    
+    return redirect(url_for('transaction_history'))
 
 
 @app.route("/_user-login", methods=['POST'])
@@ -121,16 +132,20 @@ def _user_login():
     for user in user_dict.values():
         if user.email == email:
             if user.password == password:
-                flash('Logado com Sucesso', 'success')
-                return redirect(url_for("index"))
-        
-    return redirect(url_for("user_login"))
+                session['user'] = user.name
+                flash('Logado com sucesso', 'success')
+                return redirect(url_for('transaction_history'))
+    
+    flash('Usuario ou senha nao existe', 'error')    
+    return redirect(url_for('user_login'))
 
 
 @app.route("/user-register")
 # renderiza a pagina de registro de usuario
 def user_register():
-    return render_template("user_register.html", email="", name="")
+    if 'user' not in session or session['user'] == None:
+        return render_template("user_register.html", email="", name="")
+    return redirect('transaction_history')
 
 
 @app.route("/_user-register", methods=['POST'])
@@ -155,7 +170,13 @@ def _user_register():
     
     user_dict[user.id] = user
     flash('Usuario cadatradado com sucesso', 'success') 
-    return redirect(url_for("user_login"))
+    return redirect(url_for('user_login'))
+
+
+@app.route('/user-logout')
+def _user_logout():
+    session['user'] = None
+    return redirect(url_for('user_login'))
 
 
 app.run(debug=True)
