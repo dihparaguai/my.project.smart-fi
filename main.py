@@ -42,7 +42,7 @@ transaction_dict = {
 # pagina inicial
 @app.route('/')
 def index():
-    if 'user' not in session or session['user'] == None:
+    if 'user_id' not in session or session['user_id'] == None:
         return redirect(url_for('user_login'))
     
     return redirect(url_for('transaction_history'))
@@ -51,7 +51,7 @@ def index():
 # mostra o historico de transacoes já registradas
 @app.route("/transaction-history")
 def transaction_history():
-    if 'user' not in session or session['user'] == None:
+    if 'user_id' not in session or session['user_id'] == None:
         return redirect(url_for('user_login'))
     
     page_title = 'LISTA DE TRANSAÇÕES'
@@ -61,7 +61,7 @@ def transaction_history():
 # renderiza pagina para registrar uma transacao
 @app.route("/transaction-register")
 def transaction_register():  
-    if 'user' not in session or session['user'] == None:
+    if 'user_id' not in session or session['user_id'] == None:
         return redirect(url_for('user_login'))
     
     page_title = 'CADASTRAR NOVA TRANSAÇÃO'    
@@ -95,7 +95,7 @@ def _transaction_register():
 # renderiza a pagina com a transacao escolhida atravez do id
 @app.route("/transaction-update/<int:id>")
 def transaction_update(id):
-    if 'user' not in session or session['user'] == None:
+    if 'user_id' not in session or session['user_id'] == None:
         return redirect(url_for('user_login'))
     
     transaction = transaction_dict[id]
@@ -128,11 +128,12 @@ def _transaction_delete(id):
 # renderiza a pagina de entrada do usuario
 @app.route("/user-login")
 def user_login():
-    if 'user' in session and session['user'] is not None:
+    if 'user_id' in session and session['user_id'] is not None:
         return redirect(url_for('index'))
-    
+
+    email = request.args.get('email', '')
     page_title = 'LOGIN' 
-    return render_template("user_login.html", page_title=page_title)
+    return render_template("user_login.html", page_title=page_title, email=email)
 
 
 # autentica se o usuario e senha existem
@@ -145,22 +146,25 @@ def _user_login():
     for user in user_dict.values():
         if user.email == email:
             if user.password == password:
-                session['user'] = user.name
+                session['user_id'] = user.id
                 flash('Logado com sucesso', 'success')
                 return redirect(url_for('transaction_history'))
     
     flash('Usuario ou senha nao existe', 'error')    
-    return render_template('user_login.html', email=email)
+    return redirect(url_for('user_login', email=email))
 
 
 # renderiza a pagina de registro de usuario
 @app.route("/user-register")
 def user_register():
-    if 'user' in session and session['user'] is not None:
+    if 'user_id' in session and session['user_id'] is not None:
         return redirect('transaction_history')
     
+    email = request.args.get('email', '')
+    name = request.args.get('name', '')
+    birthdate = request.args.get('name', '')
     page_title = 'CADASTRO DE LOGIN' 
-    return render_template("user_register.html", page_title=page_title)
+    return render_template("user_register.html", page_title=page_title, email=email, name=name, birthdate=birthdate)
 
 
 # valida o novo cadastro de usuario se já não existir
@@ -175,27 +179,29 @@ def _user_register():
     
     if password != password_retyped:
         flash('Senhas não foram digitadas iguais', 'error')
-        return render_template('user_register.html', email=email, name=name, birthdate=birthdate)
+        return redirect(url_for('user_register', email=email, name=name, birthdate=birthdate))
     
     for user in user_dict.values():
         if user.email == email:
             flash('Usuario ja existe', 'error')
-            return render_template('user_register.html', email=email, name=name, birthdate=birthdate)
+            return redirect(url_for('user_register', email=email, name=name, birthdate=birthdate))
         
     user = User(id=3, email=email, name=name, birthdate=birthdate, password=password)    
     user_dict[user.id] = user
     flash('Usuario cadatradado com sucesso', 'success') 
-    return render_template('user_login.html', email=email)
+    return redirect(url_for('user_login', email=email))
 
 
 # renderiza a pagina para usuario recuperar a senha
 @app.route('/user-recover-password')
 def user_recover_password():
-    if 'user' in session and session['user'] is not None:
+    if 'user_id' in session and session['user_id'] is not None:
         return redirect('index')
     
+    email = request.args.get('email', '')
+    birthdate = request.args.get('birthdate', '')
     page_title = 'RECUPERAR SENHA'
-    return render_template('user_recover_password.html', page_title=page_title)
+    return render_template('user_recover_password.html', page_title=page_title, email=email, birthdate=birthdate)
     
 
 # valida a recuperacao de senha e substitui a senha antiga
@@ -208,7 +214,7 @@ def _user_recover_password():
     
     if password != password_retyped:
         flash('Senhas não foram digitadas iguais', 'error')
-        return render_template('user_recover_password.html', email=email, birthdate=birthdate)
+        return redirect(url_for('user_recover_password', email=email, birthdate=birthdate))
     
     # verifica e altera a senha
     for user in user_dict.values():
@@ -216,16 +222,16 @@ def _user_recover_password():
             user.password = password
             user_dict[user.id] = user
             flash('Senha alterada com sucesso', 'sucess')
-            return render_template('user_login.html', email=email)
+            return redirect(url_for('user_login', email=email))
     
     flash('Email ou data de nascimentos não existem ou não estão corretos', 'error')
-    return render_template('user_recover_password.html', email=email, birthdate=birthdate)
+    return redirect(url_for('user_recover_password', email=email, birthdate=birthdate))
 
 
 # desloga usuario e o remove da sessao do negavegor
 @app.route('/user-logout')
 def _user_logout():
-    session['user'] = None
+    session['user_id'] = None
     return redirect(url_for('user_login'))
 
 
