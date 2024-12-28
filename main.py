@@ -42,7 +42,10 @@ transaction_dict = {
 # pagina inicial
 @app.route('/')
 def index():
-    return redirect(url_for('user_login'))
+    if 'user' not in session or session['user'] == None:
+        return redirect(url_for('user_login'))
+    
+    return redirect(url_for('transaction_history'))
 
 
 # mostra o historico de transacoes já registradas
@@ -123,7 +126,7 @@ def _transaction_delete(id):
 @app.route("/user-login")
 def user_login():
     if 'user' in session and session['user'] is not None:
-        return redirect(url_for('transaction_history'))
+        return redirect(url_for('index'))
     
     return render_template("user_login.html")
 
@@ -177,7 +180,16 @@ def _user_register():
     user = User(id=3, email=email, name=name, birthdate=birthdate, password=password)    
     user_dict[user.id] = user
     flash('Usuario cadatradado com sucesso', 'success') 
-    return render_template("user_login.html", email=email)
+    return render_template('user_login.html', email=email)
+
+
+# renderiza a pagina para usuario recuperar a senha
+@app.route('/user-recover-password')
+def user_recover_password():
+    if 'user' in session and session['user'] is not None:
+        return redirect('index')
+    
+    return render_template('user_recover_password.html')
 
 
 # desloga usuario e o remove da sessao do negavegor
