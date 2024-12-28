@@ -231,8 +231,14 @@ def _user_recover_password():
 # desloga usuario e o remove da sessao do negavegor
 @app.route('/user-logout')
 def _user_logout():
+    for user in user_dict.values():
+        if session['user_id'] == user.id:
+            email = user.email
+            name = user.name
+            
     session['user_id'] = None
-    return redirect(url_for('user_login'))
+    flash(f'{name} foi deslogado com sucesso!', 'info')
+    return redirect(url_for('user_login', email=email))
 
 
 app.run(debug=True)
