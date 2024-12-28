@@ -8,8 +8,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '@chave_secreta@'
 
 
-user1 = User(id=1, name="Diego", email="diego@example.com", password="senha123")
-user2 = User(id=2, name="Rodrigo", email="rodrigo@example.com", password="senha456")
+user1 = User(id=1, name="Diego", email="diego@example.com", birthdate='1996-11-19', password="senha123")
+user2 = User(id=2, name="Rodrigo", email="rodrigo@example.com", birthdate='1997-06-14', password="senha456")
 user_dict = {
     user1.id: user1,
     user2.id: user2
@@ -50,6 +50,7 @@ def index():
 def transaction_history():
     if 'user' not in session or session['user'] == None:
         return redirect(url_for('user_login'))
+    
     return render_template("transaction_history.html", transaction_dict=transaction_dict)
 
 
@@ -58,6 +59,7 @@ def transaction_history():
 def transaction_register():  
     if 'user' not in session or session['user'] == None:
         return redirect(url_for('user_login'))
+    
     return render_template("transaction_register.html", category_dict=category_dict, payment_type_dict=payment_type_dict)
 
 
@@ -120,10 +122,10 @@ def _transaction_delete(id):
 # renderiza a pagina de entrada do usuario
 @app.route("/user-login")
 def user_login():
-    if 'user' not in session or session['user'] == None:
-        return render_template("user_login.html")
+    if 'user' in session and session['user'] is not None:
+        return redirect(url_for('transaction_history'))
     
-    return redirect(url_for('transaction_history'))
+    return render_template("user_login.html")
 
 
 # autentica se o usuario e senha existem
@@ -147,9 +149,10 @@ def _user_login():
 # renderiza a pagina de registro de usuario
 @app.route("/user-register")
 def user_register():
-    if 'user' not in session or session['user'] == None:
-        return render_template("user_register.html", email="", name="")
-    return redirect('transaction_history')
+    if 'user' in session and session['user'] is not None:
+        return redirect('transaction_history')
+    
+    return render_template("user_register.html")
 
 
 # valida o novo cadastro de usuario se já não existir
@@ -158,23 +161,23 @@ def _user_register():
     
     email = request.form['email']
     name = request.form['name']
+    birthdate = request.form['birthdate']
     password = request.form['password']
     password_retyped = request.form['password_retyped']
     
     if password != password_retyped:
         flash('Senhas não foram digitadas iguais', 'error')
-        return redirect(url_for("user_register"))
+        return render_template('user_register.html', email=email, name=name, birthdate=birthdate)
     
     for user in user_dict.values():
         if user.email == email:
             flash('Usuario ja existe', 'error')
-            return render_template("user_register.html", email=email, name=name)
+            return render_template('user_register.html', email=email, name=name, birthdate=birthdate)
         
-    user = User(id=3, email=email, name=name, password=password)
-    
+    user = User(id=3, email=email, name=name, birthdate=birthdate, password=password)    
     user_dict[user.id] = user
     flash('Usuario cadatradado com sucesso', 'success') 
-    return redirect(url_for('user_login'))
+    return render_template("user_login.html", email=email)
 
 
 # desloga usuario e o remove da sessao do negavegor

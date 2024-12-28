@@ -4,8 +4,12 @@
 <form action="{{ url_for('_user_register') }}" method="POST">
     <h1>LOGIN</h1>
     <div>
-        <label for="text">Nome</label>
+        <label for="name">Nome</label>
         <input type="text" name="name" value="{{ name }}" required>
+    </div>
+    <div>
+        <label for="birthdate">Data de Nascimento</label>
+        <input type="date" name="birthdate" value="{{ birthdate }}" required>
     </div>
     <div>
         <label for="email">E-mail</label>
@@ -24,6 +28,5 @@
         <a href="{{ url_for('user_login') }}">Voltar para Login</a>
     </div>
 </form>
-
 
 {% endblock %}
