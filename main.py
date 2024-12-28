@@ -54,7 +54,8 @@ def transaction_history():
     if 'user' not in session or session['user'] == None:
         return redirect(url_for('user_login'))
     
-    return render_template("transaction_history.html", transaction_dict=transaction_dict)
+    page_title = 'LISTA DE TRANSAÇÕES'
+    return render_template("transaction_history.html", page_title=page_title, transaction_dict=transaction_dict)
 
 
 # renderiza pagina para registrar uma transacao
@@ -63,7 +64,8 @@ def transaction_register():
     if 'user' not in session or session['user'] == None:
         return redirect(url_for('user_login'))
     
-    return render_template("transaction_register.html", category_dict=category_dict, payment_type_dict=payment_type_dict)
+    page_title = 'CADASTRAR NOVA TRANSAÇÃO'    
+    return render_template("transaction_register.html", page_title=page_title, category_dict=category_dict, payment_type_dict=payment_type_dict)
 
 
 # registra uma transacao do formulario, nao passa os dados pela URL
@@ -97,7 +99,8 @@ def transaction_update(id):
         return redirect(url_for('user_login'))
     
     transaction = transaction_dict[id]
-    return render_template("transaction_update.html", category_dict=category_dict, payment_type_dict=payment_type_dict, transaction=transaction)
+    page_title = 'EDITAR TRANSAÇÃO'    
+    return render_template("transaction_update.html", page_title=page_title, category_dict=category_dict, payment_type_dict=payment_type_dict, transaction=transaction)
 
 
 # atualiza a transacao
@@ -128,7 +131,8 @@ def user_login():
     if 'user' in session and session['user'] is not None:
         return redirect(url_for('index'))
     
-    return render_template("user_login.html")
+    page_title = 'LOGIN' 
+    return render_template("user_login.html", page_title=page_title)
 
 
 # autentica se o usuario e senha existem
@@ -155,7 +159,8 @@ def user_register():
     if 'user' in session and session['user'] is not None:
         return redirect('transaction_history')
     
-    return render_template("user_register.html")
+    page_title = 'CADASTRO DE LOGIN' 
+    return render_template("user_register.html", page_title=page_title)
 
 
 # valida o novo cadastro de usuario se já não existir
@@ -189,7 +194,8 @@ def user_recover_password():
     if 'user' in session and session['user'] is not None:
         return redirect('index')
     
-    return render_template('user_recover_password.html')
+    page_title = 'RECUPERAR SENHA'
+    return render_template('user_recover_password.html', page_title=page_title)
     
 
 # valida a recuperacao de senha e substitui a senha antiga
