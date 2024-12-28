@@ -39,11 +39,13 @@ transaction_dict = {
 }
 
 
+# pagina inicial
 @app.route('/')
 def index():
     return redirect(url_for('user_login'))
 
 
+# mostra o historico de transacoes já registradas
 @app.route("/transaction-history")
 def transaction_history():
     if 'user' not in session or session['user'] == None:
@@ -51,15 +53,15 @@ def transaction_history():
     return render_template("transaction_history.html", transaction_dict=transaction_dict)
 
 
+# renderiza pagina para registrar uma transacao
 @app.route("/transaction-register")
 def transaction_register():  
     if 'user' not in session or session['user'] == None:
         return redirect(url_for('user_login'))
-    
-    # renderiza a pagina com os valores cadastrados em banco de dados
     return render_template("transaction_register.html", category_dict=category_dict, payment_type_dict=payment_type_dict)
 
 
+# registra uma transacao do formulario, nao passa os dados pela URL
 @app.route("/_transaction-register", methods=["POST"])
 def _transaction_register():
     # o retorno do request é uma string, entao foi convertido para int
@@ -83,6 +85,7 @@ def _transaction_register():
     return redirect(url_for("transaction_history"))
 
 
+# renderiza a pagina com a transacao escolhida atravez do id
 @app.route("/transaction-update/<int:id>")
 def transaction_update(id):
     if 'user' not in session or session['user'] == None:
@@ -92,6 +95,7 @@ def transaction_update(id):
     return render_template("transaction_update.html", category_dict=category_dict, payment_type_dict=payment_type_dict, transaction=transaction)
 
 
+# atualiza a transacao
 @app.route("/_transaction-update", methods=["POST"])
 def _transaction_update():
     transaction = transaction_dict[int(request.form['id'])]
@@ -106,15 +110,15 @@ def _transaction_update():
     
     return redirect(url_for("transaction_history"))
 
-
+# remove a transacao atraves do ID
 @app.route("/_transaction-delete/<int:id>")
 def _transaction_delete(id):
     transaction_dict.pop(id)
     return redirect(url_for("transaction_history"))
 
 
-@app.route("/user-login")
 # renderiza a pagina de entrada do usuario
+@app.route("/user-login")
 def user_login():
     if 'user' not in session or session['user'] == None:
         return render_template("user_login.html")
@@ -122,8 +126,8 @@ def user_login():
     return redirect(url_for('transaction_history'))
 
 
-@app.route("/_user-login", methods=['POST'])
 # autentica se o usuario e senha existem
+@app.route("/_user-login", methods=['POST'])
 def _user_login():
     
     email = request.form['email']
@@ -140,16 +144,16 @@ def _user_login():
     return redirect(url_for('user_login'))
 
 
-@app.route("/user-register")
 # renderiza a pagina de registro de usuario
+@app.route("/user-register")
 def user_register():
     if 'user' not in session or session['user'] == None:
         return render_template("user_register.html", email="", name="")
     return redirect('transaction_history')
 
 
+# valida o novo cadastro de usuario se já não existir
 @app.route("/_user-register", methods=['POST'])
-# valida o novo cadastro de usuario
 def _user_register():
     
     email = request.form['email']
@@ -173,6 +177,7 @@ def _user_register():
     return redirect(url_for('user_login'))
 
 
+# desloga usuario e o remove da sessao do negavegor
 @app.route('/user-logout')
 def _user_logout():
     session['user'] = None
