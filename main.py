@@ -54,8 +54,13 @@ def transaction_history():
     if 'user_id' not in session or session['user_id'] == None:
         return redirect(url_for('user_login'))
     
+    transaction_list = []
+    for transaction in transaction_dict.values():
+        if transaction.user.id == session['user_id']:
+            transaction_list.append(transaction)
+    
     page_title = 'LISTA DE TRANSAÇÕES'
-    return render_template("transaction_history.html", page_title=page_title, transaction_dict=transaction_dict)
+    return render_template("transaction_history.html", page_title=page_title, transaction_list=transaction_list)
 
 
 # renderiza pagina para registrar uma transacao
@@ -74,9 +79,10 @@ def _transaction_register():
     # o retorno do request é uma string, entao foi convertido para int
     category_id = int(request.form.get('category'))
     payment_type_id = int(request.form.get('payment_type'))
+    user_id = int(session['user_id'])
 
     transaction = Transaction(
-        # user=
+        user = user_dict[user_id],
         category=category_dict[category_id],
         payment_type=payment_type_dict[payment_type_id],
 
@@ -162,7 +168,7 @@ def user_register():
     
     email = request.args.get('email', '')
     name = request.args.get('name', '')
-    birthdate = request.args.get('name', '')
+    birthdate = request.args.get('birthdate', '')
     page_title = 'CADASTRO DE LOGIN' 
     return render_template("user_register.html", page_title=page_title, email=email, name=name, birthdate=birthdate)
 
@@ -231,6 +237,10 @@ def _user_recover_password():
 # desloga usuario e o remove da sessao do negavegor
 @app.route('/user-logout')
 def _user_logout():
+    
+    name = 'Usuario'
+    email = ''
+    
     for user in user_dict.values():
         if session['user_id'] == user.id:
             email = user.email
