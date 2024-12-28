@@ -146,7 +146,7 @@ def _user_login():
                 return redirect(url_for('transaction_history'))
     
     flash('Usuario ou senha nao existe', 'error')    
-    return redirect(url_for('user_login'))
+    return render_template('user_login.html', email=email)
 
 
 # renderiza a pagina de registro de usuario
@@ -190,6 +190,30 @@ def user_recover_password():
         return redirect('index')
     
     return render_template('user_recover_password.html')
+    
+
+# valida a recuperacao de senha e substitui a senha antiga
+@app.route('/_user-recover-password', methods=['POST'])
+def _user_recover_password():
+    email = request.form['email']
+    birthdate = request.form['birthdate']
+    password = request.form['password']
+    password_retyped = request.form['password_retyped']
+    
+    if password != password_retyped:
+        flash('Senhas não foram digitadas iguais', 'error')
+        return render_template('user_recover_password.html', email=email, birthdate=birthdate)
+    
+    # verifica e altera a senha
+    for user in user_dict.values():
+        if email == user.email and birthdate == user.birthdate:
+            user.password = password
+            user_dict[user.id] = user
+            flash('Senha alterada com sucesso', 'sucess')
+            return render_template('user_login.html', email=email)
+    
+    flash('Email ou data de nascimentos não existem ou não estão corretos', 'error')
+    return render_template('user_recover_password.html', email=email, birthdate=birthdate)
 
 
 # desloga usuario e o remove da sessao do negavegor
