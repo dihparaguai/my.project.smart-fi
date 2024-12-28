@@ -4,6 +4,11 @@
 <form action="/_transaction-update" method="POST">
     <input type="hidden" name="id" value="{{ transaction.id }}">
     <h1>{{ page_title }}</h1>
+    <main>
+        <a href="{{ url_for('_user_logout') }}">logout</a>
+        <a href="{{ url_for('transaction_history') }}">historico de transacoes</a>
+        <a href="{{ url_for('transaction_register') }}">cadastrar nova transação</a>
+    </main>
     <div>
         <div>
             <label for="category">Categoria</label>

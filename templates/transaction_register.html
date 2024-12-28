@@ -3,6 +3,10 @@
 
 <form action="/_transaction-register" method="POST">
     <h1>{{ page_title }}</h1>
+    <main>
+        <a href="{{ url_for('_user_logout') }}">logout</a>
+        <a href="{{ url_for('transaction_history') }}">historico de transacoes</a>
+    </main>
     <div>
         <div>
             <label for="category">Categoria</label>

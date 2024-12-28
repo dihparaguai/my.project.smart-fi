@@ -2,6 +2,7 @@
 {% block content %}
 
     <h1>{{ page_title }}</h1>
+    <a href="{{ url_for('_user_logout') }}">logout</a>
     <table class="table">
         <thead>
             <tr>
@@ -16,7 +17,7 @@
         </thead>
 
         <tbody>
-            {% for id, transaction in transaction_dict.items() %}
+            {% for transaction in transaction_list %}
             <tr>
                 <td>{{ transaction.fact_date }}</td>
                 <td>{{ transaction.payment_date }}</td>
@@ -31,5 +32,6 @@
             {% endfor %}
         </tbody>
     </table>    
+    <div><a href="{{ url_for('transaction_register') }}">Cadastrar nova transação</a></div>
 
 {% endblock %}
