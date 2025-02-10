@@ -1,17 +1,17 @@
 from modules.category import Category
-from modules.user import User
 from modules.payment_type import PaymentType
 
 
 class Transaction():
     def __init__(
-            self,
+        self,
 
         # composition
-        user: User,
         category: Category,
         payment_type: PaymentType,
 
+        # fks
+        user_id,
         # attributes
         id,
         fact_date,
@@ -20,7 +20,7 @@ class Transaction():
         transaction_type,  # expenses or incomes
         value
     ):
-        self.user = user
+        self.user_id = user_id
         self.category = category
         self.payment_type = payment_type
 
